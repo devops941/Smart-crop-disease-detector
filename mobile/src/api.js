@@ -183,10 +183,18 @@ export async function checkServerHealth() {
 
   try {
     const response = await axios.get(`${CONFIG.API_URL}/health`, {
-      timeout: 5000,
+      timeout: 15000,
     });
     return response.data;
   } catch (error) {
-    return { status: 'error', error: error?.message };
+    // If first check times out due to Render waking up from sleep, retry once
+    try {
+      const retryResponse = await axios.get(`${CONFIG.API_URL}/health`, {
+        timeout: 15000,
+      });
+      return retryResponse.data;
+    } catch (retryErr) {
+      return { status: 'error', error: retryErr?.message };
+    }
   }
 }
