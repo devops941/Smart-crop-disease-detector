@@ -21,27 +21,18 @@
  * =============================================================================
  */
 
-import { Platform } from 'react-native';
-
-const getBackendUrl = () => {
-  // If running in a web browser, use the current hostname (e.g. localhost or current IP)
-  if (Platform.OS === 'web' && typeof window !== 'undefined' && window.location) {
-    const hostname = window.location.hostname || 'localhost';
-    return `http://${hostname}:8000`;
-  }
-  // Mobile devices (Android / iOS) connect to your laptop's local IP address
-  return 'http://192.168.1.10:8000';
-};
+// Live Render Cloud Backend:
+const LIVE_RENDER_API = 'https://smart-crop-disease-detector-j44s.onrender.com';
 
 export const CONFIG = {
-  // Configured with dynamic detection for Web and LAN IP for Mobile:
-  API_URL: getBackendUrl(),
+  // Live Cloud API URL on Render (works everywhere across Web & Mobile):
+  API_URL: LIVE_RENDER_API,
 
   // Set to true to test the entire app offline with instant simulated backend responses
   USE_MOCK_API: false,
 
-  // Request timeout in milliseconds (10 seconds for responsive error feedback)
-  TIMEOUT_MS: 10000,
+  // Request timeout in milliseconds (30 seconds to accommodate Render free tier cold starts)
+  TIMEOUT_MS: 30000,
 
   // Confidence threshold below which the app warns the user to retake the photo
   CONFIDENCE_THRESHOLD: 0.60,
