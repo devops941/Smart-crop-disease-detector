@@ -1,0 +1,24 @@
+{
+  "model_name": "crop_disease_mobilenetv2_dynamic_quant",
+  "num_classes": 4,
+  "input_shape": [
+    1,
+    224,
+    224,
+    3
+  ],
+  "input_dtype": "float32",
+  "input_range": "0-255 (Rescaling layer inside model normalizes to [-1, 1])",
+  "classes": [
+    "Potato___Late_blight",
+    "Potato___healthy",
+    "Tomato___Early_blight",
+    "Tomato___healthy"
+  ],
+  "class_indices": {
+    "Potato___Late_blight": 0,
+    "Potato___healthy": 1,
+    "Tomato___Early_blight": 2,
+    "Tomato___healthy": 3
+  }
+}

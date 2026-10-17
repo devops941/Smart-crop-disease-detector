@@ -1,0 +1,13 @@
+# Smart Crop Disease Detector - Stage 2: Backend Dependencies
+fastapi>=0.110.0
+uvicorn[standard]>=0.28.0
+python-multipart>=0.0.9
+Pillow>=10.0.0
+numpy>=1.24.0
+requests>=2.31.0
+
+# Official lightweight Google LiteRT runtime (~20MB, ultra-fast 2s startup, cross-platform)
+ai-edge-litert>=2.0.0
+
+# Optional fallback inference runtime (can be omitted in minimal cloud deployments):
+tensorflow>=2.15.0

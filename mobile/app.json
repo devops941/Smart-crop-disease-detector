@@ -1,0 +1,41 @@
+{
+  "expo": {
+    "name": "Smart Crop Doctor",
+    "slug": "smart-crop-disease-detector",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "light",
+    "splash": {
+      "backgroundColor": "#1B5E20"
+    },
+    "ios": {
+      "supportsTablet": true,
+      "infoPlist": {
+        "NSCameraUsageDescription": "Smart Crop Doctor requires camera access to photograph diseased plant leaves.",
+        "NSPhotoLibraryUsageDescription": "Smart Crop Doctor requires photo library access to diagnose crop photos."
+      }
+    },
+    "android": {
+      "package": "com.smartcrop.diseasedetector",
+      "permissions": [
+        "CAMERA",
+        "READ_EXTERNAL_STORAGE",
+        "WRITE_EXTERNAL_STORAGE"
+      ],
+      "adaptiveIcon": {
+        "backgroundColor": "#1B5E20",
+        "foregroundImage": "./assets/icon.png"
+      }
+    },
+    "plugins": [
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "Smart Crop Doctor needs access to your photos to diagnose plant leaf diseases.",
+          "cameraPermission": "Smart Crop Doctor needs camera access to photograph crop leaves in the field."
+        }
+      ]
+    ]
+  }
+}

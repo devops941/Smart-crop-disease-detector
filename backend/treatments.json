@@ -1,0 +1,22 @@
+{
+  "Potato___Late_blight": {
+    "symptoms": "[TO BE VERIFIED from TNAU/ICAR] Dark water-soaked lesions on leaves rapidly expanding into purplish-black spots, white fungal-like growth underneath leaf surfaces during humid weather.",
+    "treatment": "[TO BE VERIFIED from TNAU/ICAR] Remove and destroy severely infected haulms/vines immediately. Apply recommended protective fungicides as per local agricultural university/extension guidelines.",
+    "prevention": "[TO BE VERIFIED from TNAU/ICAR] Use certified disease-free seed tubers, ensure wide row spacing for good air circulation, avoid overhead sprinkler irrigation, and practice 2-3 year crop rotation."
+  },
+  "Potato___healthy": {
+    "symptoms": "No visible disease symptoms. Foliage is vibrant green, firm, and actively growing without necrotic spots or lesions.",
+    "treatment": "No disease treatment required. Continue balanced nutrition (NPK) and standard crop management.",
+    "prevention": "Maintain scheduled scouting, proper hilling, weed management, and regular soil moisture monitoring."
+  },
+  "Tomato___Early_blight": {
+    "symptoms": "[TO BE VERIFIED from TNAU/ICAR] Concentric dark brown-to-black ring spots ('target board' pattern) on older lower leaves, leaf yellowing around lesions, premature defoliation.",
+    "treatment": "[TO BE VERIFIED from TNAU/ICAR] Prune and discard diseased lower leaves. Apply university-approved contact or systemic protective spray in accordance with local agronomist advisory.",
+    "prevention": "[TO BE VERIFIED from TNAU/ICAR] Apply organic mulch around plant bases to prevent soil splash, stake plants to elevate canopy, practice 3-year solanaceous crop rotation, and water at soil level."
+  },
+  "Tomato___healthy": {
+    "symptoms": "Healthy leaf tissue. Clear green coloration with uniform foliage structure and absence of chlorosis or fungal spots.",
+    "treatment": "No disease treatment required. Continue balanced fertilization and adequate hydration.",
+    "prevention": "Ensure adequate spacing, sanitize pruning tools, inspect weekly for early pest/disease vectors, and maintain balanced soil nutrients."
+  }
+}

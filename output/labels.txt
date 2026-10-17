@@ -1,0 +1,4 @@
+Potato___Late_blight
+Potato___healthy
+Tomato___Early_blight
+Tomato___healthy
