@@ -6,8 +6,9 @@ Pillow>=10.0.0
 numpy>=1.24.0
 requests>=2.31.0
 
-# Official lightweight Google LiteRT runtime (~20MB, ultra-fast 2s startup, cross-platform)
+# Official lightweight Google LiteRT runtime (~20MB, ultra-fast 2s startup, fits Render 512MB RAM)
 ai-edge-litert>=2.0.0
 
-# Optional fallback inference runtime (can be omitted in minimal cloud deployments):
-tensorflow>=2.15.0
+# Full TensorFlow is only required for model training (see ml/requirements.txt).
+# Kept commented out for production deployment to prevent Render 512MB RAM build timeouts.
+# tensorflow>=2.15.0
