@@ -7,8 +7,14 @@
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
     "splash": {
+      "image": "./assets/splash-icon.png",
+      "resizeMode": "contain",
       "backgroundColor": "#1B5E20"
     },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    },
+
     "ios": {
       "supportsTablet": true,
       "infoPlist": {
@@ -19,9 +25,10 @@
     "android": {
       "package": "com.smartcrop.diseasedetector",
       "permissions": [
-        "CAMERA",
-        "READ_EXTERNAL_STORAGE",
-        "WRITE_EXTERNAL_STORAGE"
+        "android.permission.CAMERA",
+        "android.permission.READ_EXTERNAL_STORAGE",
+        "android.permission.WRITE_EXTERNAL_STORAGE",
+        "android.permission.RECORD_AUDIO"
       ],
       "adaptiveIcon": {
         "backgroundColor": "#1B5E20",
@@ -36,6 +43,11 @@
           "cameraPermission": "Smart Crop Doctor needs camera access to photograph crop leaves in the field."
         }
       ]
-    ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "4f7b0072-0a01-459e-a62f-87798c01fad9"
+      }
+    }
   }
 }

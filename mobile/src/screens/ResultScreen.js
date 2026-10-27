@@ -15,9 +15,10 @@ import {
   StyleSheet,
   ScrollView,
   ActivityIndicator,
-  SafeAreaView,
   Platform,
 } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+
 import { THEME } from '../theme';
 import { STRINGS } from '../strings';
 import { Button } from '../components/Button';
@@ -158,10 +159,40 @@ export function ResultScreen({ route, navigation }) {
         )}
 
         {/* ------------------------------------------------------------------ */}
+        {/* NON-LEAF REJECTION CARD */}
+        {/* ------------------------------------------------------------------ */}
+        {!loading && data && data.is_leaf === false && (
+          <View style={styles.notLeafCard}>
+            <Text style={styles.notLeafIcon}>🌿❌</Text>
+            <Text style={styles.notLeafTitle}>Not a Plant Leaf</Text>
+            <Text style={styles.notLeafBody}>
+              {data.rejection_reason || 'The uploaded photo does not appear to contain a plant leaf.'}
+            </Text>
+            <View style={styles.notLeafAdviceBox}>
+              <Text style={styles.notLeafAdvice}>
+                💡 {data.advice || 'Please capture a clear, focused close-up photo of a crop or plant leaf in good lighting.'}
+              </Text>
+            </View>
+            <Button
+              title="📷 Take Another Photo"
+              onPress={() => navigation.navigate('Home')}
+              style={styles.retryButton}
+            />
+          </View>
+        )}
+
+        {/* ------------------------------------------------------------------ */}
         {/* DIAGNOSIS RESULTS */}
         {/* ------------------------------------------------------------------ */}
         {!loading && data && primaryPrediction && (
           <View>
+            {/* AI Engine Badge if present */}
+            {data.ai_engine && (
+              <View style={styles.engineBadge}>
+                <Text style={styles.engineBadgeText}>✨ {data.ai_engine}</Text>
+              </View>
+            )}
+
             {/* Low Confidence Warning Banner */}
             {isLowConfidence && (
               <View style={styles.warningCard}>
@@ -172,10 +203,31 @@ export function ResultScreen({ route, navigation }) {
 
             {/* Primary Result Headline Card */}
             <View style={[styles.primaryCard, healthy ? styles.primaryHealthy : styles.primaryDisease]}>
-              <Text style={styles.primaryLabel}>{STRINGS.topDiagnosis}</Text>
+              <View style={styles.primaryHeaderRow}>
+                <Text style={styles.primaryLabel}>{STRINGS.topDiagnosis}</Text>
+                {data.severity && data.severity !== 'None' && (
+                  <View style={styles.severityTag}>
+                    <Text style={styles.severityText}>{data.severity} Severity</Text>
+                  </View>
+                )}
+              </View>
               <Text style={styles.primaryTitle}>
                 {formatDiseaseName(primaryPrediction.disease)}
               </Text>
+
+              {data.scientific_name ? (
+                <Text style={styles.scientificNameText}>
+                  🔬 {data.scientific_name}
+                </Text>
+              ) : null}
+
+              {data.botanical_notes ? (
+                <View style={styles.botanicalBox}>
+                  <Text style={styles.botanicalText}>
+                    🌱 {data.botanical_notes}
+                  </Text>
+                </View>
+              ) : null}
 
               {/* Confidence Badge */}
               <View style={styles.primaryConfRow}>
@@ -185,6 +237,7 @@ export function ResultScreen({ route, navigation }) {
                 </Text>
               </View>
             </View>
+
 
             {/* Treatment, Symptoms & Prevention Quick Accordions */}
             {primaryPrediction.info && (
@@ -493,4 +546,99 @@ const styles = StyleSheet.create({
   detailBtn: {
     marginBottom: THEME.spacing.sm,
   },
+  notLeafCard: {
+    backgroundColor: '#FFF8E1',
+    borderRadius: THEME.borderRadius.lg,
+    padding: THEME.spacing.lg,
+    marginBottom: THEME.spacing.md,
+    borderWidth: 2,
+    borderColor: '#FFC107',
+    alignItems: 'center',
+    ...THEME.shadows.card,
+  },
+  notLeafIcon: {
+    fontSize: 40,
+    marginBottom: 8,
+  },
+  notLeafTitle: {
+    fontSize: 20,
+    fontWeight: '800',
+    color: '#D84315',
+    marginBottom: 6,
+  },
+  notLeafBody: {
+    fontSize: 14,
+    color: THEME.colors.textPrimary,
+    textAlign: 'center',
+    lineHeight: 20,
+    marginBottom: THEME.spacing.sm,
+  },
+  notLeafAdviceBox: {
+    backgroundColor: '#FFFDE7',
+    borderRadius: THEME.borderRadius.md,
+    padding: THEME.spacing.sm,
+    width: '100%',
+    marginBottom: THEME.spacing.md,
+    borderWidth: 1,
+    borderColor: '#FFE082',
+  },
+  notLeafAdvice: {
+    fontSize: 13,
+    color: '#5D4037',
+    lineHeight: 18,
+    textAlign: 'center',
+  },
+  engineBadge: {
+    alignSelf: 'flex-start',
+    backgroundColor: '#E8F5E9',
+    paddingVertical: 4,
+    paddingHorizontal: 10,
+    borderRadius: 12,
+    marginBottom: THEME.spacing.xs,
+    borderWidth: 1,
+    borderColor: '#C8E6C9',
+  },
+  engineBadgeText: {
+    fontSize: 12,
+    fontWeight: '700',
+    color: '#2E7D32',
+  },
+  primaryHeaderRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  severityTag: {
+    backgroundColor: '#FFECB3',
+    paddingVertical: 2,
+    paddingHorizontal: 8,
+    borderRadius: 8,
+  },
+  severityText: {
+    fontSize: 11,
+    fontWeight: '800',
+    color: '#E65100',
+    textTransform: 'uppercase',
+  },
+  scientificNameText: {
+    fontSize: 14,
+    fontStyle: 'italic',
+    color: THEME.colors.textSecondary,
+    marginBottom: 4,
+  },
+  botanicalBox: {
+    backgroundColor: 'rgba(0,0,0,0.04)',
+    borderRadius: THEME.borderRadius.sm,
+    padding: 8,
+    marginVertical: 6,
+    borderLeftWidth: 3,
+    borderLeftColor: THEME.colors.primary,
+  },
+  botanicalText: {
+    fontSize: 12,
+    color: THEME.colors.textPrimary,
+    lineHeight: 17,
+  },
 });
+
+

@@ -10,13 +10,16 @@ import React, { useState, useEffect } from 'react';
 import {
   View,
   Text,
+  Image,
   StyleSheet,
   ScrollView,
   Alert,
-  SafeAreaView,
   StatusBar,
   TouchableOpacity,
 } from 'react-native';
+
+import { SafeAreaView } from 'react-native-safe-area-context';
+
 import * as ImagePicker from 'expo-image-picker';
 import { THEME } from '../theme';
 import { STRINGS } from '../strings';
@@ -145,10 +148,20 @@ export function HomeScreen({ navigation }) {
       <ScrollView contentContainerStyle={styles.container}>
         {/* Header Hero */}
         <View style={styles.heroCard}>
-          <Text style={styles.appBadge}>🌱 AI Crop Health Assistant</Text>
-          <Text style={styles.appTitle}>{STRINGS.appName}</Text>
+          <View style={styles.heroHeaderRow}>
+            <Image
+              source={require('../../assets/logo.png')}
+              style={styles.heroLogo}
+              resizeMode="contain"
+            />
+            <View style={styles.heroTextCol}>
+              <Text style={styles.appBadge}>🌱 AI Crop Health Assistant</Text>
+              <Text style={styles.appTitle}>{STRINGS.appName}</Text>
+            </View>
+          </View>
           <Text style={styles.appTagline}>{STRINGS.homeSubheading}</Text>
         </View>
+
 
         {/* Server Connection Status Pill */}
         <TouchableOpacity
@@ -241,14 +254,30 @@ const styles = StyleSheet.create({
     marginBottom: THEME.spacing.md,
     ...THEME.shadows.card,
   },
+  heroHeaderRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: THEME.spacing.sm,
+  },
+  heroLogo: {
+    width: 60,
+    height: 60,
+    borderRadius: 14,
+    marginRight: THEME.spacing.md,
+    backgroundColor: '#0D3810',
+  },
+  heroTextCol: {
+    flex: 1,
+  },
   appBadge: {
-    fontSize: 12,
+    fontSize: 11,
     fontWeight: '700',
     color: '#A5D6A7',
     textTransform: 'uppercase',
     letterSpacing: 0.8,
-    marginBottom: 4,
+    marginBottom: 2,
   },
+
   appTitle: {
     fontSize: 26,
     fontWeight: '800',

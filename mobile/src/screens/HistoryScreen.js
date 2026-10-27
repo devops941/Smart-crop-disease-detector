@@ -16,8 +16,9 @@ import {
   TouchableOpacity,
   StyleSheet,
   Alert,
-  SafeAreaView,
 } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+
 import { useFocusEffect } from '@react-navigation/native';
 import { THEME } from '../theme';
 import { STRINGS } from '../strings';

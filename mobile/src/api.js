@@ -13,6 +13,8 @@ import { Platform } from 'react-native';
 import axios from 'axios';
 import { CONFIG } from './config';
 import { STRINGS } from './strings';
+import { analyzeLeafWithGeminiDirect } from './geminiClient';
+
 
 /**
  * Uploads a leaf photo to the backend server and returns predictions.
@@ -72,9 +74,22 @@ export async function uploadLeaf(imageUri) {
   }
 
   // ---------------------------------------------------------------------------
+  // 1.5 DIRECT CLIENT-SIDE GEMINI VISION AI (If configured in config.js)
+  // ---------------------------------------------------------------------------
+  if (CONFIG.GEMINI_API_KEY && CONFIG.GEMINI_API_KEY.trim().length > 10) {
+    try {
+      console.log('[API] Running direct client-side Gemini 1.5 Flash Vision diagnosis...');
+      return await analyzeLeafWithGeminiDirect(imageUri, CONFIG.GEMINI_API_KEY);
+    } catch (geminiErr) {
+      console.warn('[Gemini Client Error]:', geminiErr.message, '-> falling back to server...');
+    }
+  }
+
+  // ---------------------------------------------------------------------------
   // 2. LIVE PRODUCTION HTTP CALL
   // ---------------------------------------------------------------------------
   const url = `${CONFIG.API_URL}/predict`;
+
 
   // Create multipart/form-data payload
   const formData = new FormData();

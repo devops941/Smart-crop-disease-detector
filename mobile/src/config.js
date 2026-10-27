@@ -39,4 +39,10 @@ export const CONFIG = {
 
   // Storage key for scan history
   HISTORY_STORAGE_KEY: '@crop_disease_scans_v1',
+
+  // Optional: Direct Client-Side Gemini Vision AI
+  // Reads securely from EXPO_PUBLIC_GEMINI_API_KEY in .env or defaults to empty
+  GEMINI_API_KEY: process.env.EXPO_PUBLIC_GEMINI_API_KEY || '',
 };
+
+

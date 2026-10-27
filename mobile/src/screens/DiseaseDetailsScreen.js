@@ -14,8 +14,9 @@ import {
   Image,
   StyleSheet,
   ScrollView,
-  SafeAreaView,
 } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+
 import { THEME } from '../theme';
 import { STRINGS } from '../strings';
 import { Button } from '../components/Button';

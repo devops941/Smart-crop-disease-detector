@@ -9,6 +9,11 @@ requests>=2.31.0
 # Official lightweight Google LiteRT runtime (~20MB, ultra-fast 2s startup, fits Render 512MB RAM)
 ai-edge-litert>=2.0.0
 
+# Multimodal Generative Vision AI & Environment support
+google-generativeai>=0.8.0
+python-dotenv>=1.0.0
+
 # Full TensorFlow is only required for model training (see ml/requirements.txt).
 # Kept commented out for production deployment to prevent Render 512MB RAM build timeouts.
 # tensorflow>=2.15.0
+

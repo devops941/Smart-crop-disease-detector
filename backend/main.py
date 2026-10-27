@@ -28,6 +28,17 @@ from fastapi import FastAPI, UploadFile, File, HTTPException, Request, status
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 
+# Optional Gemini Multimodal Vision AI service
+try:
+    from backend.ai_service import is_gemini_configured, analyze_leaf_with_gemini
+except ImportError:
+    try:
+        from ai_service import is_gemini_configured, analyze_leaf_with_gemini
+    except ImportError:
+        def is_gemini_configured():
+            return False
+        analyze_leaf_with_gemini = None
+
 # ------------------------------------------------------------------------------
 # 1. LOGGING & CONSTANTS CONFIGURATION
 # ------------------------------------------------------------------------------
@@ -36,6 +47,7 @@ logging.basicConfig(
     format="%(asctime)s [%(levelname)s] %(name)s: %(message)s",
 )
 logger = logging.getLogger("CropDiseaseAPI")
+
 
 # Threshold below which a prediction is flagged as uncertain
 CONFIDENCE_THRESHOLD: float = 0.60
@@ -255,7 +267,7 @@ async def log_requests(request: Request, call_next):
 @app.get(
     "/health",
     summary="Health Check",
-    response_description="Server status and number of loaded crop disease classes",
+    response_description="Server status, loaded crop disease classes, and AI engine status",
 )
 async def health_check():
     """
@@ -263,9 +275,12 @@ async def health_check():
     Used by mobile clients, uptime monitors, and load balancers.
     """
     classes_count = len(model_state["labels"])
+    gemini_ready = is_gemini_configured()
     return {
         "status": "ok",
         "classes": classes_count,
+        "ai_engine": "Gemini 1.5 Flash Multimodal Vision" if gemini_ready else "TFLite MobileNetV2",
+        "gemini_configured": gemini_ready,
     }
 
 
@@ -276,8 +291,8 @@ async def health_check():
 )
 async def predict_crop_disease(file: UploadFile = File(...)):
     """
-    Accepts a single leaf photo, validates it, runs TFLite inference,
-    and returns top-3 predictions with treatment and prevention guidance.
+    Accepts a single leaf photo, validates it, runs AI analysis (Gemini 1.5 Flash Vision
+    or quantized TFLite fallback), and returns top predictions with ICAR guidance.
     """
     # --------------------------------------------------------------------------
     # Step 1: Validate File Presence & Name
@@ -358,8 +373,23 @@ async def predict_crop_disease(file: UploadFile = File(...)):
         )
 
     # --------------------------------------------------------------------------
+    # Step 3.5: Multimodal Vision AI Inference (Google Gemini 1.5 Flash)
+    # --------------------------------------------------------------------------
+    if is_gemini_configured() and analyze_leaf_with_gemini is not None:
+        try:
+            logger.info("Executing deep leaf analysis with Gemini 1.5 Flash Vision...")
+            gemini_result = analyze_leaf_with_gemini(img_rgb)
+            return gemini_result
+        except Exception as e:
+            logger.warning(
+                f"Gemini Vision AI diagnosis failed ({e}). Falling back to local TFLite model...",
+                exc_info=True,
+            )
+
+    # --------------------------------------------------------------------------
     # Step 4: Preprocess Image (Matching Model Contract)
     # --------------------------------------------------------------------------
+
     # Model contract: [1, 224, 224, 3], float32, raw pixel values [0, 255]
     # (Normalization [-1, 1] is handled by the internal Rescaling layer)
     img_resized = img_rgb.resize((224, 224), Image.Resampling.BILINEAR)

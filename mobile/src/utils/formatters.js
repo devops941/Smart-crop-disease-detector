@@ -17,42 +17,36 @@ export function formatDiseaseName(rawName) {
     return 'Unknown Condition';
   }
 
-  // Split by triple or single underscores
-  let parts = [];
-  if (rawName.includes('___')) {
-    parts = rawName.split('___');
-  } else if (rawName.includes('_')) {
-    // If e.g. "Tomato_healthy", split on first underscore
-    const firstIdx = rawName.indexOf('_');
-    parts = [rawName.slice(0, firstIdx), rawName.slice(firstIdx + 1)];
-  } else {
-    parts = [rawName];
-  }
-
-  const crop = parts[0] || '';
-  let condition = parts[1] || '';
-
-  // Clean condition underscores
-  condition = condition.replace(/_/g, ' ').trim();
-
-  // Special title for healthy leaves
-  if (condition.toLowerCase() === 'healthy') {
-    condition = 'Healthy Leaf';
-  }
-
-  // Capitalize words
   const capitalize = (str) =>
     str
       .split(' ')
+      .filter(Boolean)
       .map((w) => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase())
       .join(' ');
 
-  if (!condition) {
-    return capitalize(crop);
+  // Split strictly by triple underscores if present
+  if (rawName.includes('___')) {
+    const parts = rawName.split('___');
+    const crop = parts[0].replace(/_/g, ' ').trim();
+    let condition = (parts[1] || '').replace(/_/g, ' ').trim();
+    if (condition.toLowerCase() === 'healthy') {
+      condition = 'Healthy Leaf';
+    }
+    return condition ? `${capitalize(crop)} — ${capitalize(condition)}` : capitalize(crop);
   }
 
-  return `${capitalize(crop)} — ${capitalize(condition)}`;
+  // If already separated by dash / em-dash
+  if (rawName.includes(' — ') || rawName.includes(' - ')) {
+    const sep = rawName.includes(' — ') ? ' — ' : ' - ';
+    const parts = rawName.split(sep);
+    return `${capitalize(parts[0].trim())} — ${capitalize(parts[1].trim())}`;
+  }
+
+  // Replace any remaining underscores with spaces cleanly
+  const cleaned = rawName.replace(/_/g, ' ').trim();
+  return capitalize(cleaned);
 }
+
 
 /**
  * Formats float confidence (0.0 to 1.0) into percentage string (e.g. "99.9%")
